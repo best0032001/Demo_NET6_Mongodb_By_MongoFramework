@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IMongoDbConnection>(sp =>
     MongoDbConnection.FromConnectionString(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
 builder.Services.AddTransient<BookStoreDbContext>();
+//https://medium.com/@TimHolzherr/writing-migrations-for-mongodb-in-c-f4ceb64e00c1
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
