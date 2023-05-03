@@ -1,0 +1,37 @@
+{
+   "variables": [
+      {
+         "name": "root-dir",
+         "command": "cmd",
+         "args": ["/c", "dir", "/b"]
+      }
+   ],
+   "tasks": [
+      {
+         "name": "dotnet-build",
+         "command": "dotnet",
+         "group": "pre-commit",
+         "args": ["build"]
+      },
+      {
+         "name": "echo staged files",
+         "pathMode": "absolute",
+         "command": "cmd",
+         "group": "pre-commit",
+         "args": [ "/c", "echo", "${staged}"]
+      },
+      {
+         "name": "dotnet-format",
+         "command": "dotnet",
+         "group": "pre-commit",
+         "args": ["format", "--verify-no-changes","--include" , "${staged}"],
+         "include": ["**/*.cs"]
+      },
+      {
+         "name": "commit-message-linter",
+         "command": "dotnet",
+         "args": ["husky", "exec", ".husky/csx/commit-lint.csx", "--args", "${args}"]
+      }
+ 
+   ]
+}
