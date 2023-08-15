@@ -1,0 +1,2 @@
+﻿mongodump --host <host-ip> --port 27017 --db <database>  --authenticationDatabase admin --username <username> --password <password> --out ./Documents/
+mongorestore --host <host-ip> --port 27017 --db <database>  --authenticationDatabase admin --username <username> --password <password>  ./Documents/
