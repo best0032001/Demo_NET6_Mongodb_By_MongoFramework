@@ -7,12 +7,12 @@ namespace Demo_NET6_Mongodb_By_MongoFramework.Controllers;
 
 [Route("api")]
 [ApiController]
-public class BookController: ControllerBase
+public class BookController : ControllerBase
 {
     private BookStoreDbContext _bookStoreDbContext;
     public BookController(BookStoreDbContext bookStoreDbContext)
     {
-        _bookStoreDbContext=bookStoreDbContext;
+        _bookStoreDbContext = bookStoreDbContext;
     }
     [HttpGet("books")]
     public async Task<ActionResult> GetBooks()
@@ -23,26 +23,25 @@ public class BookController: ControllerBase
     [HttpGet("books/{bookId}")]
     public async Task<ActionResult> GetBooks(String bookId)
     {
-        List<Book> books = _bookStoreDbContext.Books.Where(w=>w.Id== bookId).ToList();
+        List<Book> books = _bookStoreDbContext.Books.Where(w => w.Id == bookId).ToList();
         return Ok(books);
     }
     [HttpDelete("books/{bookId}")]
     public async Task<ActionResult> DeleteBooks(String bookId)
     {
-        List<Book> books = _bookStoreDbContext.Books.Where(w => w.Id == bookId).ToList();
-        _bookStoreDbContext.Books.RemoveRange(books);
+        Book book = _bookStoreDbContext.Books.Where(w => w.Id == bookId).First();
+        _bookStoreDbContext.Books.Remove(book);
         _bookStoreDbContext.SaveChanges();
-        books = _bookStoreDbContext.Books.ToList();
+        List<Book> books = _bookStoreDbContext.Books.ToList();
         return Ok(books);
     }
     [HttpPut("books/{bookId}")]
     public async Task<ActionResult> UpdateBooks(String bookId, [FromBody] Book book)
     {
         Book bookData = _bookStoreDbContext.Books.Where(w => w.Id == bookId).First();
-        bookData.Name = book.Name;
-        bookData.Price = book.Price;
-        bookData.Category = book.Category;
-        bookData.Author = book.Author;
+        _bookStoreDbContext.Books.Remove(bookData);
+        _bookStoreDbContext.SaveChanges();
+        _bookStoreDbContext.Books.Add(book);
         _bookStoreDbContext.SaveChanges();
         List<Book> books = _bookStoreDbContext.Books.ToList();
         return Ok(books);
