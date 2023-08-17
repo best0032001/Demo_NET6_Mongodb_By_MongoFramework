@@ -10,7 +10,7 @@ public static class TestMongoMigrationBuilderExtensions
     {
         return app.UseMongoMigration(m => m
     .ForEntity<Book>(e => e
-        .AtVersion(3)
+        .AtVersion(1)
         .WithMigration(new ExampleMigration())));
     }
 }

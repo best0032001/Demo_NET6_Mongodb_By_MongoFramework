@@ -3,11 +3,11 @@ using MongoDB.Extensions.Migration;
 
 public class ExampleMigration : IMigration
 {
-    public int Version => 3;
+    public int Version => 1;
 
     public void Up(BsonDocument document)
     {
-        document["LastName"] = "-";
+      //  document["LastName2"] = document["LastName"];
     }
 
     public void Down(BsonDocument document)
