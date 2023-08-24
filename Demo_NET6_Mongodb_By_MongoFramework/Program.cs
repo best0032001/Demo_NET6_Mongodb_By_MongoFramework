@@ -19,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-//app.UseTestMongoMigration();
+app.UseTestMongoMigration();
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
