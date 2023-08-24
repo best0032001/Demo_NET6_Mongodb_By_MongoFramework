@@ -7,10 +7,11 @@ public class BookContext : IBookContext
 {
     public BookContext(IConfiguration configuration)
     {
-        var client = new MongoClient(configuration.GetConnectionString("BookStoreDbConnection"));
-        var database = client.GetDatabase(configuration.GetConnectionString("DatabaseName"));
+        MongoClient = new MongoClient(configuration.GetConnectionString("BookStoreDbConnection"));
+        var database = MongoClient.GetDatabase(configuration.GetConnectionString("DatabaseName"));
 
         Books = database.GetCollection<Book>("Book");
     }
+    public MongoClient MongoClient { get; set; }
     public IMongoCollection<Book> Books { get; }
 }

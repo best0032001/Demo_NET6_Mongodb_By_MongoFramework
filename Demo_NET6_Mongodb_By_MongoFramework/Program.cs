@@ -8,12 +8,12 @@ using MongoFramework;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Services.AddSingleton(_ => new MongoClient(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
+builder.Services.AddSingleton(_ => new MongoClient(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
 
-builder.Services.AddTransient<IMongoDbConnection>(sp =>
-    MongoDbConnection.FromConnectionString(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
-builder.Services.AddTransient<BookStoreDbContext>();
-//builder.Services.AddScoped<IBookContext, BookContext>();
+//builder.Services.AddTransient<IMongoDbConnection>(sp =>
+//    MongoDbConnection.FromConnectionString(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
+//builder.Services.AddTransient<BookStoreDbContext>();
+builder.Services.AddScoped<IBookContext, BookContext>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
