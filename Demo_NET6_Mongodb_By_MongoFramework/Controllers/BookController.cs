@@ -67,6 +67,7 @@ public class BookController : ControllerBase
                 _bookStoreDbContext.SaveChanges();
                 _bookStoreDbContext.Books.Add(book);
                 _bookStoreDbContext.SaveChanges();
+                session.CommitTransaction();
                 List<Book> books = _bookStoreDbContext.Books.ToList();
                 return Ok(books);
             }
@@ -86,9 +87,16 @@ public class BookController : ControllerBase
             session.StartTransaction();
             try
             {
+                Book book2 = new Book();
+                book2.LastName2=book.LastName2;
+                book2.Author=book.Author;
+                book2.Name=book.Name;
+
                 _bookStoreDbContext.Books.Add(book);
-                _bookStoreDbContext.Books.Add(book);
+                _bookStoreDbContext.SaveChanges(session);
+                _bookStoreDbContext.Books.Add(book2);
                 _bookStoreDbContext.SaveChanges();
+                session.AbortTransaction();
                 List<Book> books = _bookStoreDbContext.Books.ToList();
                 return Ok(books);
             }
