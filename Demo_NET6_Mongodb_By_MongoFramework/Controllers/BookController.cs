@@ -91,9 +91,7 @@ public class BookController : ControllerBase
                 book2.LastName2=book.LastName2;
                 book2.Author=book.Author;
                 book2.Name=book.Name;
-
-                _bookStoreDbContext.Books.Add(book);
-                _bookStoreDbContext.SaveChanges(session);
+                _bookStoreDbContext.SaveChanges();
                 _bookStoreDbContext.Books.Add(book2);
                 _bookStoreDbContext.SaveChanges();
                 session.AbortTransaction();
