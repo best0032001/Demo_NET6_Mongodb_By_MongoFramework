@@ -1,3 +1,4 @@
+using Demo_NET6_Mongodb_By_MongoFramework.Exceptions;
 using Demo_NET6_Mongodb_By_MongoFramework.Extensions;
 using Demo_NET6_Mongodb_By_MongoFramework.Models;
 using Demo_NET6_Mongodb_By_MongoFramework.Models.Entities;
@@ -18,6 +19,7 @@ builder.Services.AddSingleton(_ => new MongoClient(builder.Configuration.GetConn
 builder.Services.AddScoped<IBookContext, BookContext>();
 builder.Services.AddScoped<IBookRepository,BookRepository>();
 builder.Services.AddControllers();
+builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
