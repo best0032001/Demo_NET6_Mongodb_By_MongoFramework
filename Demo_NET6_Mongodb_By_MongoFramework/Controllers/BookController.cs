@@ -1,5 +1,6 @@
 using Demo_NET6_Mongodb_By_MongoFramework.Models;
 using Demo_NET6_Mongodb_By_MongoFramework.Models.Entities;
+using Demo_NET6_Mongodb_By_MongoFramework.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Net;
@@ -14,90 +15,37 @@ public class BookController : ControllerBase
 {
     //  private BookStoreDbContext _bookStoreDbContext;
     private readonly IBookContext _context;
-    public BookController(IBookContext context)
+    private readonly IBookRepository _bookRepository;
+    public BookController(IBookContext context,IBookRepository bookRepository)
     {
         _context = context;
+        _bookRepository = bookRepository;
     }
     [HttpGet("books")]
     public async Task<ActionResult> GetBooks()
-    {
-        List<Book> books = _context.Books.Find(p => true).ToList();
-        return Ok(books);
+    {   
+        return Ok(await _bookRepository.GetBooks());
     }
     [HttpGet("books/{bookId}")]
     public async Task<ActionResult> GetBooks(String bookId)
     {
-        List<Book> books = _context.Books.Find(p =>p.Id==bookId).ToList();
-        return Ok(books);
+        return Ok(await _bookRepository.GetBooks(bookId));
     }
     [HttpDelete("books/{bookId}")]
     public async Task<ActionResult> DeleteBooks(String bookId)
     {
-        using (var session = _context.MongoClient.StartSession())
-        {
-            session.StartTransaction();
-            try
-            {
-
-                FilterDefinition<Book> filter = Builders<Book>.Filter.Eq(m => m.Id, bookId);
-                DeleteResult deleteResult =  _context.Books.DeleteOne(session, filter);
-                List<Book> books = _context.Books.Find(session,p => true).ToList();
-                session.CommitTransaction();
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                session.AbortTransaction();
-                return BadRequest();
-
-            }
-        }
+        return Ok(await _bookRepository.DeleteBooks(bookId));
 
     }
     [HttpPut("books/{bookId}")]
     public async Task<ActionResult> UpdateBooks(String bookId, [FromBody] Book book)
     {
-
-        using (var session = _context.MongoClient.StartSession())
-        {
-            session.StartTransaction();
-            try
-            {
-                book.Id= bookId;
-                var updateResult =  _context
-                                        .Books
-                                        .ReplaceOne(session,filter: g => g.Id == bookId, replacement: book);
-
-                List<Book> books = _context.Books.Find(session,p => true).ToList();
-                session.CommitTransaction();
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                session.AbortTransaction();
-                return BadRequest();
-            }
-        }
+        return Ok(await _bookRepository.UpdateBooks(book));
     }
 
     [HttpPost("books")]
     public async Task<ActionResult> AddBooks(Book book)
     {
-        using (var session = _context.MongoClient.StartSession())
-        {
-            session.StartTransaction();
-            try
-            {
-                _context.Books.InsertOne(session,book);
-                List<Book> books = _context.Books.Find(session, p => true).ToList();
-                session.CommitTransaction();
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
-                session.AbortTransaction();
-                return BadRequest();
-            }
-        }
+        return Ok(await _bookRepository.AddBooks(book));
     }
 }

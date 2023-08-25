@@ -1,6 +1,8 @@
 using Demo_NET6_Mongodb_By_MongoFramework.Extensions;
 using Demo_NET6_Mongodb_By_MongoFramework.Models;
 using Demo_NET6_Mongodb_By_MongoFramework.Models.Entities;
+using Demo_NET6_Mongodb_By_MongoFramework.Repository;
+using Demo_NET6_Mongodb_By_MongoFramework.Repository.Interface;
 using MongoDB.Driver;
 using MongoDB.Extensions.Migration;
 using MongoFramework;
@@ -14,6 +16,7 @@ builder.Services.AddSingleton(_ => new MongoClient(builder.Configuration.GetConn
 //    MongoDbConnection.FromConnectionString(builder.Configuration.GetConnectionString("BookStoreDbConnection")));
 //builder.Services.AddTransient<BookStoreDbContext>();
 builder.Services.AddScoped<IBookContext, BookContext>();
+builder.Services.AddScoped<IBookRepository,BookRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
